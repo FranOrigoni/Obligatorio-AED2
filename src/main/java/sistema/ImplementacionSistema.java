@@ -2,7 +2,19 @@ package sistema;
 
 import interfaz.*;
 
+import java.util.ArrayList;
+
 public class ImplementacionSistema implements Sistema {
+
+    ArrayList<Pasajero> pasajeros = new ArrayList<>();
+
+    public ArrayList<Pasajero> getPasajeros() {
+        return pasajeros;
+    }
+
+    public void setPasajeros(ArrayList<Pasajero> pasajeros) {
+        this.pasajeros = pasajeros;
+    }
 
     @Override
     public Retorno inicializarSistema(int maxEstaciones) {
@@ -16,32 +28,29 @@ public class ImplementacionSistema implements Sistema {
     }
 
     @Override
-    public Retorno registrarPasajero(String identificadorPasajero, String nombre, int edad) {
-            // Verificar que los parámetros no son vacíos o null
-            if (identificadorPasajero == null || identificadorPasajero.isEmpty() ||
-                    nombre == null || nombre.isEmpty()) {
-                return Retorno.error1("Los parametros no pueden ser vacios");
+    public  Retorno registrarPasajero(String identificadorPasajero, String nombre, int edad) {
+            if (!validarIdentificador(identificadorPasajero)) {
+                return Retorno.error2("Identificador no tiene formato valido");
             }
 
-            // Validar el formato con expresión regular
-            String regex = "^[A-Z]{2}\\d{6}[A-Z0-9]{1}$";
-            if (!identificadorPasajero.matches(regex)) {
-                return Retorno.error2("el identificador debe tener un formato vàlido");
+            if (nombre == null || nombre.isEmpty() && edad >0) {
+                return Retorno.error1("alguno de los parámetros es vacío o nul");
             }
 
-            // Verificar si ya existe un pasajero registrado con el identificador dado
-            if (pasajeros.containsKey(identificadorPasajero)) {
-                return Retorno.error3("Ya existe pasajero con ese identificador");
+            if (pasajeros.stream().anyMatch(p -> p.getIdentificador().equals(identificadorPasajero))) {
+                return Retorno.error3("Ya existe un pasajero con ese identificador");
             }
 
-            // Registrar al pasajero con sus datos
-            Pasajero nuevoPasajero = new Pasajero(identificadorPasajero, nombre, edad);
-            pasajeros.put(identificadorPasajero, nuevoPasajero);
-
+            Pasajero pasajero = new Pasajero(identificadorPasajero, nombre, edad);
+            pasajeros.add(pasajero);
             return Retorno.ok();
     }
 
 
+    public static boolean validarIdentificador(String identificador) {
+        String regex = "^(FR|DE|UK|ES|OT)[1-9]\\d{0,2}(\\.\\d{3}){0,2}#\\d$";
+        return identificador.matches(regex);
+    }
 
     @Override
     public Retorno filtrarPasajeros(Consulta consulta) {

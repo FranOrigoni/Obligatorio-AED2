@@ -46,6 +46,23 @@ public class Pasajero {
     public void setNacionalidad(String nacionalidad) {
         this.nacionalidad = nacionalidad;
     }
+
+    public boolean validarDatos(String identificadorPasajero, String nombre, int edad) {
+        if (identificadorPasajero != null && !identificadorPasajero.isEmpty() && nombre != null && !nombre.isEmpty() && edad > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Pasajero{" +
+                "identificador='" + identificador + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", edad=" + edad +
+                ", nacionalidad='" + nacionalidad + '\'' +
+                '}';
+    }
 }
 
 
