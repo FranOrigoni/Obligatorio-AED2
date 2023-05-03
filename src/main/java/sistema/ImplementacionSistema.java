@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class ImplementacionSistema implements Sistema {
 
-    ArrayList<Pasajero> pasajeros = new ArrayList<>();
+    ABBPasajero abbPasajero = new ABBPasajero();
 
-    public ArrayList<Pasajero> getPasajeros() {
-        return pasajeros;
+    public ABBPasajero getAbbPasajero() {
+        return abbPasajero;
     }
 
-    public void setPasajeros(ArrayList<Pasajero> pasajeros) {
-        this.pasajeros = pasajeros;
+    public void setAbbPasajero(ABBPasajero abbPasajero) {
+        this.abbPasajero = abbPasajero;
     }
 
     @Override
@@ -26,24 +26,24 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.ok();
         }
     }
-
     @Override
-    public  Retorno registrarPasajero(String identificadorPasajero, String nombre, int edad) {
-            if (!validarIdentificador(identificadorPasajero)) {
-                return Retorno.error2("Identificador no tiene formato valido");
-            }
+    public Retorno registrarPasajero(String identificadorPasajero, String nombre, int edad) {
+        if (!validarIdentificador(identificadorPasajero)) {
+            return Retorno.error2("Identificador no tiene formato valido");
+        }
 
-            if (nombre == null || nombre.isEmpty() && edad >0) {
-                return Retorno.error1("alguno de los parámetros es vacío o nul");
-            }
+        if (nombre.isEmpty() || edad < 0) {
+            return Retorno.error1("alguno de los parámetros es vacío o nul");
+        }
 
-            if (pasajeros.stream().anyMatch(p -> p.getIdentificador().equals(identificadorPasajero))) {
-                return Retorno.error3("Ya existe un pasajero con ese identificador");
-            }
 
-            Pasajero pasajero = new Pasajero(identificadorPasajero, nombre, edad);
-            pasajeros.add(pasajero);
-            return Retorno.ok();
+        if (abbPasajero.pertence(identificadorPasajero)) {
+            return Retorno.error3("Ya existe un pasajero con ese identificador");
+        }
+
+        Pasajero pasajero = new Pasajero(identificadorPasajero, nombre, edad);
+        abbPasajero.insertar(pasajero);
+        return Retorno.ok();
     }
 
 
