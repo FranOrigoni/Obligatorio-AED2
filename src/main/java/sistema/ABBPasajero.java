@@ -50,14 +50,14 @@ public class ABBPasajero {
     }
 
     public void imprimirDatos() {
-        imprimirDatos3(raiz);
+        imprimirDatos(raiz);
     }
 
-    public void imprimirDatos3(NodoABB nodo) {
+    public void imprimirDatos(NodoABB nodo) {
         if (nodo != null) {
             System.out.println(nodo.getNodoPasajero().getNombre());
-            imprimirDatos3(nodo.getIzq());
-            imprimirDatos3(nodo.getDer());
+            imprimirDatos(nodo.getIzq());
+            imprimirDatos(nodo.getDer());
         } else {
             //no hago nada
         }

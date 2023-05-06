@@ -12,10 +12,6 @@ public class ImplementacionSistema implements Sistema {
         return abbPasajero;
     }
 
-    public void setAbbPasajero(ABBPasajero abbPasajero) {
-        this.abbPasajero = abbPasajero;
-    }
-
     @Override
     public Retorno inicializarSistema(int maxEstaciones) {
 
@@ -47,13 +43,24 @@ public class ImplementacionSistema implements Sistema {
     }
 
 
+//Explicacion de validador // Ver si no conviene implementar metodo en ABBPasajero
+/*
+    El indentificadoir debe comenzar (^) con una de las cinco abreviaturas de país: "FR", "DE", "UK", "ES" o "OT"
+    [1-9] es una clase de caracteres que representa cualquier dígito del 1 al 9.
+    d{0,2} puede haber un número de 0 a 2 dígitos despues de la abrevitartua del país
+    (.\d{3})El punto decimal se representa con el carácter "." y el dígito {3} indica que debe haber exactamente tres dígitos después del punto decimal símbolo "{}" se utiliza para indicar una cantidad específica de dígitos
+    {0,2}  indica que este patrón de tres dígitos separados por un punto puede repetirse de 0 a 2 veces, lo que significa que se pueden tener cero, uno o dos grupos de tres dígitos separados por punto
+    #\d$ significa que debe haber un símbolo de número (#) seguido de un dígito al final de la cadena  "\d" representa cualquier dígito del 0 al 9, y el signo "$" indica que la cadena debe terminar después de este dígito
+*/
     public static boolean validarIdentificador(String identificador) {
-        String regex = "^(FR|DE|UK|ES|OT)[1-9]\\d{0,2}(\\.\\d{3}){0,2}#\\d$";
-        return identificador.matches(regex);
+        String cadena = "^(FR|DE|UK|ES|OT)[1-9]\\d{0,2}(\\.\\d{3}){0,2}#\\d$";
+        return identificador.matches(cadena);
     }
 
     @Override
     public Retorno filtrarPasajeros(Consulta consulta) {
+
+
         return Retorno.noImplementada();
     }
 
