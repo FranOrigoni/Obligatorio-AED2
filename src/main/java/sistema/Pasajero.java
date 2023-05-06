@@ -63,6 +63,32 @@ public class Pasajero {
                 ", nacionalidad='" + nacionalidad + '\'' +
                 '}';
     }
+/*
+    public int compareTo(Pasajero p) {
+        int comparacionIdentificador = this.identificador.compareTo(p.identificador);
+        if(comparacionIdentificador == 0){
+            return this.identificador.compareTo(p.identificador);
+        } else if (comparacionIdentificador < 0) {
+            return this.identificador.compareTo(p.identificador);
+        }else
+            return comparacionIdentificador;
+    }
+
+ */
+
+    public int compareTo(Pasajero p) {
+        int comparacionIdentificador = this.identificador.compareTo(p.identificador);
+        if (comparacionIdentificador == 0) {
+            return this.nombre.compareTo(p.nombre);
+        } else if (comparacionIdentificador < 0) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+
+
 }
 
 
