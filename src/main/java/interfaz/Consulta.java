@@ -1,5 +1,8 @@
 package interfaz;
 
+import sistema.ABBPasajero;
+import sistema.Pasajero;
+
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -63,6 +66,10 @@ public class Consulta {
             this.valorNacionalidad = valorNacionalidad;
         }
 
+        public Nacionalidad getValorNacionalidad() {
+            return valorNacionalidad;
+        }
+
         public NodoConsulta(final TipoNodoConsulta tipoNodoConsulta,
                             final NodoConsulta izq,
                             final NodoConsulta der) {
@@ -95,7 +102,7 @@ public class Consulta {
         }
     }
 
-    public Consulta or(Consulta consulta) {
+        public Consulta or(Consulta consulta) {
         return or(this, consulta);
     }
 
@@ -409,4 +416,6 @@ public class Consulta {
         }
         return null;
     }
+
+
 }

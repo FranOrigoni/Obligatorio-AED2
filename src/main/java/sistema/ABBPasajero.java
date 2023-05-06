@@ -1,5 +1,7 @@
 package sistema;
 
+import interfaz.Consulta;
+
 public class ABBPasajero {
     private NodoABB raiz;
 
@@ -11,22 +13,24 @@ public class ABBPasajero {
         }
     }
 
-
+    public NodoABB getRaiz() {
+        return raiz;
+    }
 
     private void insertarRec(NodoABB nodo, Pasajero nodoPasajero) {
-            if (nodo.getNodoPasajero().compareTo(nodoPasajero) > 0) {
-                if (nodo.izq == null) {
-                    nodo.izq = new NodoABB(nodoPasajero);
-                } else {
-                    insertarRec(nodo.izq, nodoPasajero);
-                }
-            } else if (nodo.getNodoPasajero().compareTo(nodoPasajero) < 0) {
-                if (nodo.der == null) {
-                    nodo.der = new NodoABB(nodoPasajero);
-                } else {
-                    insertarRec(nodo.der, nodoPasajero);
-                }
+        if (nodo.getNodoPasajero().compareTo(nodoPasajero) > 0) {
+            if (nodo.izq == null) {
+                nodo.izq = new NodoABB(nodoPasajero);
+            } else {
+                insertarRec(nodo.izq, nodoPasajero);
             }
+        } else if (nodo.getNodoPasajero().compareTo(nodoPasajero) < 0) {
+            if (nodo.der == null) {
+                nodo.der = new NodoABB(nodoPasajero);
+            } else {
+                insertarRec(nodo.der, nodoPasajero);
+            }
+        }
 
     }
 
@@ -102,4 +106,60 @@ public class ABBPasajero {
             this.der = der;
         }
     }
+
+    public String filtrarPasajero(Consulta c) {
+        return filtrarPasajero(raiz, c);
+    }
+
+    private boolean filtrarPasajeroB(NodoABB pasajero, Consulta.NodoConsulta c){
+        if (c.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.EdadMayor)) {
+            return pasajero.getNodoPasajero().getEdad() > c.getValorInt();
+        }
+        if (c.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.Nacionalidad)) {
+            return pasajero.getNodoPasajero().getNacionalidad().equals(c.getValorNacionalidad().getCodigo());
+        }
+        if (c.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.NombreIgual)) {
+            return pasajero.getNodoPasajero().getNombre().equals(c.getValorString());
+        }
+        if(c.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.And)){
+            return filtrarPasajeroB(pasajero, c.getIzq()) && filtrarPasajeroB(pasajero, c.getDer());
+        }
+        if(c.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.Or)){
+            return filtrarPasajeroB(pasajero, c.getIzq()) || filtrarPasajeroB(pasajero, c.getDer());
+        }
+
+
+    }
+
+    private String filtrarPasajero(NodoABB pasajero, Consulta.NodoConsulta c) {
+
+        String resultado = "";
+        if (pasajero == null) {
+            return resultado;
+        }
+
+        if(filtrarPasajeroB(pasajero, c)){
+            resultado += " " + pasajero.getNodoPasajero().getIdentificador();
+        }
+
+
+
+                return resultado;
+            } else if (pasajero.getIzq() != null) {
+                return filtrarPasajero(pasajero.getIzq(), c);
+            }
+            else (pasajero.getDer() != null) {
+                return filtrarPasajero(pasajero.getDer(), c);
+            }
+
+
+            if (pasajero.getNodoPasajero().getEdad())
+
+
+        }
+
+        return "";
+    }
+
+
 }

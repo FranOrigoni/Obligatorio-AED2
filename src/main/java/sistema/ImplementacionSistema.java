@@ -2,7 +2,6 @@ package sistema;
 
 import interfaz.*;
 
-import java.util.ArrayList;
 
 public class ImplementacionSistema implements Sistema {
 
@@ -43,7 +42,9 @@ public class ImplementacionSistema implements Sistema {
     }
 
 
-//Explicacion de validador // Ver si no conviene implementar metodo en ABBPasajero
+
+
+    //Explicacion de validador // Ver si no conviene implementar metodo en ABBPasajero
 /*
     El indentificadoir debe comenzar (^) con una de las cinco abreviaturas de país: "FR", "DE", "UK", "ES" o "OT"
     [1-9] es una clase de caracteres que representa cualquier dígito del 1 al 9.
@@ -61,8 +62,11 @@ public class ImplementacionSistema implements Sistema {
     public Retorno filtrarPasajeros(Consulta consulta) {
 
 
+
         return Retorno.noImplementada();
     }
+
+
 
     @Override
     public Retorno buscarPasajero(String identificador) {

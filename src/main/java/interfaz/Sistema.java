@@ -24,6 +24,8 @@ public interface Sistema {
      *
      * @param consulta La consulta a aplicar
      */
+
+
     Retorno filtrarPasajeros(Consulta consulta);
 
     /**
