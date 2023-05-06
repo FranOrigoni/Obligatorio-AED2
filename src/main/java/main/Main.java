@@ -1,5 +1,6 @@
 package main;
 
+import interfaz.Consulta;
 import interfaz.Retorno;
 import interfaz.Sistema;
 import jdk.jshell.ImportSnippet;
@@ -28,18 +29,27 @@ public class Main {
 
         ABBPasajero abbPasajero = IS.getAbbPasajero();
         IS.registrarPasajero("FR123.456#2","Felipe",21);
-        IS.registrarPasajero("ES222.333#9","Lucas",24);
+        IS.registrarPasajero("FR222.333#9","Lucas",25);
         IS.registrarPasajero("OT3.212.322#2","Fabian",42);
         IS.registrarPasajero("DE1.233.222#5","Fran",31);
+        IS.registrarPasajero("OT1.232.322#0","Cavani",18);
         IS.registrarPasajero("US3212","CR7",38);
         IS.registrarPasajero("ES029.232#3:","Neymar",29);
 
 
-        abbPasajero.imprimirDatos();
+    //    IS.filtrarPasajeros(Consulta.edadMayor(22));
+        IS.filtrarPasajeros(Consulta.fromString("[edad > 22] AND [nacionalidad ='FR' AND nombre='Felipe']"));
+
+     //  abbPasajero.imprimirDatos();
 
 
+/*
+        FR123.456#2
+        ES222.333#9
+        OT3.212.322#2
+        DE1.233.222#5
 
-
+*/
 
     }
 }

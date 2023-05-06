@@ -21,6 +21,7 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.ok();
         }
     }
+
     @Override
     public Retorno registrarPasajero(String identificadorPasajero, String nombre, int edad) {
         if (!validarIdentificador(identificadorPasajero)) {
@@ -42,8 +43,6 @@ public class ImplementacionSistema implements Sistema {
     }
 
 
-
-
     //Explicacion de validador // Ver si no conviene implementar metodo en ABBPasajero
 /*
     El indentificadoir debe comenzar (^) con una de las cinco abreviaturas de país: "FR", "DE", "UK", "ES" o "OT"
@@ -61,11 +60,13 @@ public class ImplementacionSistema implements Sistema {
     @Override
     public Retorno filtrarPasajeros(Consulta consulta) {
 
+        String texto = abbPasajero.filtrarPasajero(consulta);
 
-
-        return Retorno.noImplementada();
+        if (texto.equals("")) {
+            return  Retorno.error1("Consulta vacía");
+        }
+        return Retorno.ok(texto);
     }
-
 
 
     @Override
