@@ -63,25 +63,43 @@ public class ImplementacionSistema implements Sistema {
         String texto = abbPasajero.filtrarPasajero(consulta);
 
         if (texto.equals("")) {
+
             return  Retorno.error1("Consulta vacía");
         }
+        System.out.println(texto);
         return Retorno.ok(texto);
     }
 
 
     @Override
     public Retorno buscarPasajero(String identificador) {
-        return Retorno.noImplementada();
+      Retorno retorno = abbPasajero.buscarPasajero(identificador);
+
+      if(!validarIdentificador(identificador)){
+          System.out.println("El identidicador no tiene formato valido");
+          return Retorno.error1("El identidicador no tiene formato valido");
+      }
+
+      if(retorno != null) {
+          System.out.println(retorno.toString() + " Numero de recoridas " + retorno.getValorInteger());
+          Retorno.ok();
+      }
+        System.out.println("No exite pasajero registrado con ese identidicador");
+        return Retorno.error2("No exite pasajero registrado con ese identidicador");
     }
 
     @Override
     public Retorno listarPasajerosAscendente() {
+
         return Retorno.noImplementada();
     }
 
     @Override
     public Retorno listarPasajerosDescendente() {
-        return Retorno.noImplementada();
+        String ret =   abbPasajero.listarPasajerosDescendente();
+        System.out.println(ret);
+        return Retorno.ok();
+
     }
 
     @Override

@@ -78,6 +78,7 @@ public class Pasajero {
 
     public int compareTo(Pasajero p) {
         int comparacionIdentificador = this.identificador.compareTo(p.identificador);
+
         if (comparacionIdentificador == 0) {
             return this.nombre.compareTo(p.nombre);
         } else if (comparacionIdentificador < 0) {

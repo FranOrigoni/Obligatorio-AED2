@@ -15,32 +15,34 @@ public class Main {
         ImplementacionSistema IS = new ImplementacionSistema();
         String identificadorValido = "FR123.456#2";
         String identificadorMalo = "ES029.232#3";
+
         /*
         if (ImplementacionSistema.validarIdentificador(identificadorValido)) {
             System.out.println("Identificador válido");
         } else {
             System.out.println("Identificador inválido");
         }
+
 */
-
-
 
 
 
         ABBPasajero abbPasajero = IS.getAbbPasajero();
         IS.registrarPasajero("FR123.456#2","Felipe",21);
         IS.registrarPasajero("FR222.333#9","Lucas",25);
-        IS.registrarPasajero("OT3.212.322#2","Fabian",42);
+       // IS.registrarPasajero("OT3.212.322#2","Fabian",42);
         IS.registrarPasajero("DE1.233.222#5","Fran",31);
         IS.registrarPasajero("OT1.232.322#0","Cavani",18);
         IS.registrarPasajero("US3212","CR7",38);
         IS.registrarPasajero("ES029.232#3:","Neymar",29);
 
 
-    //    IS.filtrarPasajeros(Consulta.edadMayor(22));
-        IS.filtrarPasajeros(Consulta.fromString("[edad > 22] AND [nacionalidad ='FR' AND nombre='Felipe']"));
+    // IS.filtrarPasajeros(Consulta.edadMayor(22));
+      //  IS.filtrarPasajeros(Consulta.fromString("[edad > 20] AND [nacionalidad ='FR' AND nombre='Felipe']"));
+     //   IS.buscarPasajero("OT3.212.322#2");
+     //    abbPasajero.imprimirDatos();
 
-     //  abbPasajero.imprimirDatos();
+        IS.listarPasajerosDescendente();
 
 
 /*

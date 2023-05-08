@@ -8,14 +8,33 @@ public class Retorno {
         OK, ERROR_1, ERROR_2, ERROR_3, ERROR_4, ERROR_5, ERROR_6, ERROR_7, NO_IMPLEMENTADA
     }
 
-    private final Resultado resultado;
-    private final Integer valorInteger;
-    private final String valorString;
+    private  Resultado resultado;
+    private  Integer valorInteger;
+    private  String valorString;
 
     private Retorno(Resultado resultado, Integer valorInteger, String valorString) {
         this.resultado = resultado;
         this.valorInteger = valorInteger;
         this.valorString = valorString;
+    }
+
+    public Retorno(Integer valorInteger, String valorString,Resultado resultado) {
+        this.valorInteger = valorInteger;
+        this.valorString = valorString;
+        this.resultado = resultado;
+
+    }
+
+    public void setValorInteger(Integer valorInteger) {
+        this.valorInteger = valorInteger;
+    }
+
+    public void setValorString(String valorString) {
+        this.valorString = valorString;
+    }
+
+    public void setResultado(Resultado resultado) {
+        this.resultado = resultado;
     }
 
     public Resultado getResultado() {
