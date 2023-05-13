@@ -1,6 +1,7 @@
 package sistema;
 
 import interfaz.Consulta;
+import interfaz.Nacionalidad;
 import interfaz.Retorno;
 
 public class ABBPasajero {
@@ -32,7 +33,6 @@ public class ABBPasajero {
                 insertarRec(nodo.der, nodoPasajero);
             }
         }
-
     }
 
 
@@ -146,31 +146,27 @@ public class ABBPasajero {
         if(filtrarPasajeroB(pasajero, c)){
             resultado += " " + pasajero.getNodoPasajero().getIdentificador();
         }
-            return resultado + filtrarPasajero(pasajero.getIzq(), c) + filtrarPasajero(pasajero.getDer(),c);
+        return resultado + filtrarPasajero(pasajero.getIzq(), c) + filtrarPasajero(pasajero.getDer(),c);
     }
 
 
     public Retorno buscarPasajero(String identificador) {
         int contador =0 ;
-       return buscarPasajeroRec(raiz,identificador,contador);
-    }
-
-    private Retorno buscarPasajeroRec(NodoABB nodo, String identificador, int contador) {
         String datosPasajero = "";
-       Retorno retorno = new Retorno(contador,datosPasajero, Retorno.Resultado.OK);
+        return buscarPasajeroRec(raiz,identificador,contador, datosPasajero);
+    }
+    private Retorno buscarPasajeroRec(NodoABB nodo, String identificador, int contador, String datosPasajero) {
 
         if (nodo != null) {
             contador ++;
             if (identificador.equals(nodo.getNodoPasajero().getIdentificador())) {
-                retorno.setResultado(Retorno.Resultado.OK);
-                retorno.setValorInteger(contador);
                 datosPasajero = nodo.getNodoPasajero().getIdentificador() + ";" + nodo.getNodoPasajero().getNombre() + ";" + nodo.getNodoPasajero().getEdad() + ";" + nodo.getNodoPasajero().getNacionalidad();
-                retorno.setValorString(datosPasajero);
-                return retorno ;
+
+                return Retorno.ok(contador,datosPasajero);
             } else if (identificador.compareTo(nodo.getNodoPasajero().getIdentificador()) < 0) {
-                return buscarPasajeroRec(nodo.izq, identificador,contador);
+                return buscarPasajeroRec(nodo.izq, identificador,contador, datosPasajero);
             } else {
-                return buscarPasajeroRec(nodo.der, identificador,contador);
+                return buscarPasajeroRec(nodo.der, identificador,contador, datosPasajero);
             }
         } else {
             return null;
@@ -181,18 +177,45 @@ public class ABBPasajero {
 
     public String listarPasajerosDescendente() {
         String datos = "";
-       return listarPasajerosDescendenteRec(raiz,datos);
+        return listarPasajerosDescendenteRec(raiz,datos);
     }
     private String listarPasajerosDescendenteRec(NodoABB nodo, String datos){
         if(nodo != null){
-
-            datos = listarPasajerosDescendenteRec(nodo.getIzq(),datos);
-            datos +=nodo.getNodoPasajero().toString();
             datos = listarPasajerosDescendenteRec(nodo.getDer(),datos);
+            datos += "\n" + nodo.getNodoPasajero().toString();
+            datos = listarPasajerosDescendenteRec(nodo.getIzq(),datos);
         }
         return datos;
     }
 
+    public String listarPasajerosAscendente() {
+        String datos = "";
+        return listarPasajerosAscendenteRec(raiz,datos);
+    }
+    private String listarPasajerosAscendenteRec(NodoABB nodo, String datos){
+        if(nodo != null){
+            datos = listarPasajerosAscendenteRec(nodo.getIzq(),datos);
+            datos += "\n" + nodo.getNodoPasajero().toString();
+            datos = listarPasajerosAscendenteRec(nodo.getDer(),datos);
+        }
+        return datos;
+    }
+    public String listarPasajerosPorNacionalidad(Nacionalidad nacionalidad) {
+        String datos = "";
+        return listarPasajerosPorNacionalidadRec(nacionalidad, raiz, datos);
+    }
+    public String listarPasajerosPorNacionalidadRec(Nacionalidad nacionalidad, NodoABB pasajero, String datos) {
+
+        if (pasajero != null) {
+            if (pasajero.getNodoPasajero().getNacionalidad().equals(nacionalidad))
+            {
+                datos += pasajero.getNodoPasajero().getIdentificador() + ";" + pasajero.getNodoPasajero().getNombre() + ";" + pasajero.getNodoPasajero().getEdad() + ";" + pasajero.getNodoPasajero().getNacionalidad() + "\n";
+            }
+            datos = listarPasajerosPorNacionalidadRec(nacionalidad, pasajero.getIzq(), datos);
+            datos = listarPasajerosPorNacionalidadRec(nacionalidad, pasajero.getDer(), datos);
+        }
+        return datos;
+    }
 
 
 

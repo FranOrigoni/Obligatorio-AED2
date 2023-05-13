@@ -73,30 +73,33 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno buscarPasajero(String identificador) {
-      Retorno retorno = abbPasajero.buscarPasajero(identificador);
+        Retorno retorno = abbPasajero.buscarPasajero(identificador);
 
-      if(!validarIdentificador(identificador)){
-          System.out.println("El identidicador no tiene formato valido");
-          return Retorno.error1("El identidicador no tiene formato valido");
-      }
+        if(!validarIdentificador(identificador)){
+            System.out.println("El identidicador no tiene formato valido");
+            return Retorno.error1("El identidicador no tiene formato valido");
+        }
 
-      if(retorno != null) {
-          System.out.println(retorno.toString() + " Numero de recoridas " + retorno.getValorInteger());
-          Retorno.ok();
-      }
-        System.out.println("No exite pasajero registrado con ese identidicador");
-        return Retorno.error2("No exite pasajero registrado con ese identidicador");
+        if(retorno != null) {
+            System.out.println(retorno.toString() + " Numero de recorridas " + retorno.getValorInteger());
+           return Retorno.ok();
+        }else{
+            System.out.println("No exite pasajero registrado con ese identidicador");
+            return Retorno.error2("No exite pasajero registrado con ese identidicador");
+        }
+
     }
 
     @Override
     public Retorno listarPasajerosAscendente() {
-
-        return Retorno.noImplementada();
+        String ret = abbPasajero.listarPasajerosAscendente();
+        System.out.println(ret);
+        return Retorno.ok();
     }
 
     @Override
     public Retorno listarPasajerosDescendente() {
-        String ret =   abbPasajero.listarPasajerosDescendente();
+        String ret = abbPasajero.listarPasajerosDescendente();
         System.out.println(ret);
         return Retorno.ok();
 
@@ -104,7 +107,9 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno listarPasajerosPorNacionalidad(Nacionalidad nacionalidad) {
-        return Retorno.noImplementada();
+        String ret = abbPasajero.listarPasajerosPorNacionalidad(nacionalidad);
+        System.out.println(ret);
+        return Retorno.ok();
     }
 
     @Override
