@@ -82,7 +82,7 @@ public class ImplementacionSistema implements Sistema {
 
       if(retorno != null) {
           System.out.println(retorno.toString() + " Numero de recoridas " + retorno.getValorInteger());
-          Retorno.ok();
+         return Retorno.ok();
       }
         System.out.println("No exite pasajero registrado con ese identidicador");
         return Retorno.error2("No exite pasajero registrado con ese identidicador");
@@ -104,11 +104,14 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno listarPasajerosPorNacionalidad(Nacionalidad nacionalidad) {
-        return Retorno.noImplementada();
+        String ret = abbPasajero.listarPasajerosPorNacionalidad(nacionalidad);
+        System.out.println(ret);
+        return Retorno.ok();
     }
 
     @Override
     public Retorno registrarEstacionDeTren(String codigo, String nombre) {
+
         return Retorno.noImplementada();
     }
 

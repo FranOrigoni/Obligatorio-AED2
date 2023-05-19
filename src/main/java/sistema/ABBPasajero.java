@@ -2,6 +2,7 @@ package sistema;
 
 import interfaz.Consulta;
 import interfaz.Retorno;
+import interfaz.Nacionalidad;
 
 public class ABBPasajero {
     private NodoABB raiz;
@@ -121,7 +122,7 @@ public class ABBPasajero {
                     return pasajero.getNodoPasajero().getEdad() > c.getValorInt();
                 }
                 if (c.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.Nacionalidad)) {
-                    return pasajero.getNodoPasajero().getNacionalidad().equals(c.getValorNacionalidad().getCodigo());
+                    return pasajero.getNodoPasajero().getNacionalidad().equals(c.getValorNacionalidad());
                 }
                 if (c.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.NombreIgual)) {
                     return pasajero.getNodoPasajero().getNombre().equals(c.getValorString());
@@ -194,6 +195,23 @@ public class ABBPasajero {
     }
 
 
+    public String listarPasajerosPorNacionalidad(Nacionalidad nacionalidad) {
+        String datos = "";
+        return listarPasajerosPorNacionalidadRec(nacionalidad, raiz, datos);
+    }
+
+    public String listarPasajerosPorNacionalidadRec(Nacionalidad nacionalidad, NodoABB pasajero, String datos) {
+
+        if (pasajero != null) {
+            if (pasajero.getNodoPasajero().getNacionalidad().equals(nacionalidad))
+            {
+                datos += pasajero.getNodoPasajero().getIdentificador() + ";" + pasajero.getNodoPasajero().getNombre() + ";" + pasajero.getNodoPasajero().getEdad() + ";" + pasajero.getNodoPasajero().getNacionalidad() + "\n";
+            }
+            datos = listarPasajerosPorNacionalidadRec(nacionalidad, pasajero.getIzq(), datos);
+            datos = listarPasajerosPorNacionalidadRec(nacionalidad, pasajero.getDer(), datos);
+        }
+        return datos;
+    }
 
 
 }

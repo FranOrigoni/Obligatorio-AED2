@@ -8,6 +8,7 @@ import sistema.ABBPasajero;
 import sistema.ImplementacionSistema;
 import interfaz.Retorno;
 import sistema.Pasajero;
+import  interfaz.Nacionalidad;
 
 public class Main {
     public static void main(String[] args) {
@@ -37,12 +38,13 @@ public class Main {
         IS.registrarPasajero("ES029.232#3:","Neymar",29);
 
 
-    // IS.filtrarPasajeros(Consulta.edadMayor(22));
-      //  IS.filtrarPasajeros(Consulta.fromString("[edad > 20] AND [nacionalidad ='FR' AND nombre='Felipe']"));
-     //   IS.buscarPasajero("OT3.212.322#2");
+   // IS.filtrarPasajeros(Consulta.edadMayor(22));
+      IS.filtrarPasajeros(Consulta.fromString("[edad > 24] AND [nacionalidad ='FR' OR nombre='Felipe']"));
+     // IS.listarPasajerosPorNacionalidad(Nacionalidad.Alemania);
+      // IS.buscarPasajero("FR123.456#2");
      //    abbPasajero.imprimirDatos();
 
-        IS.listarPasajerosDescendente();
+      // IS.listarPasajerosDescendente();
 
 
 /*

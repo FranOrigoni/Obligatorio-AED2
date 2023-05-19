@@ -1,18 +1,21 @@
 package sistema;
 
+import interfaz.Nacionalidad;
+
 public class Pasajero {
 
     private String identificador;
     private String nombre;
     private int edad;
-    private String nacionalidad;
+    private Nacionalidad nacionalidad;
 
     public Pasajero(String identificador, String nombre, int edad) {
         this.identificador = identificador;
         this.nombre = nombre;
         this.edad = edad;
-        this.nacionalidad = identificador.substring(0, 2);
+        this.nacionalidad = Nacionalidad.fromCodigo(identificador.substring(0,2));
     }
+
 
 
     public String getIdentificador() {
@@ -39,11 +42,11 @@ public class Pasajero {
         this.edad = edad;
     }
 
-    public String getNacionalidad() {
+    public Nacionalidad getNacionalidad() {
         return nacionalidad;
     }
 
-    public void setNacionalidad(String nacionalidad) {
+    public void setNacionalidad(Nacionalidad nacionalidad) {
         this.nacionalidad = nacionalidad;
     }
 
