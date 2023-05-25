@@ -6,6 +6,7 @@ import interfaz.*;
 public class ImplementacionSistema implements Sistema {
 
     ABBPasajero abbPasajero = new ABBPasajero();
+    EstacionDeTrenGrafo grafoEstacion = new EstacionDeTrenGrafo(10,true);
 
     public ABBPasajero getAbbPasajero() {
         return abbPasajero;
@@ -18,6 +19,8 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error1("maxEstaciones es menor o igual a 5");
         } else {
             // Iniciar estructuras necesarias para el sistema.
+            // ABBPasajero abbPasajero = new ABBPasajero();
+           // EstacionDeTrenGrafo grafoEstacion = new EstacionDeTrenGrafo(maxEstaciones,true);
             return Retorno.ok();
         }
     }
@@ -67,7 +70,7 @@ public class ImplementacionSistema implements Sistema {
             return  Retorno.error1("Consulta vacía");
         }
         System.out.println(texto);
-        return Retorno.ok(texto);
+        return Retorno.ok();
     }
 
 
@@ -111,15 +114,15 @@ public class ImplementacionSistema implements Sistema {
 
     @Override
     public Retorno registrarEstacionDeTren(String codigo, String nombre) {
-
-        return Retorno.noImplementada();
+        return grafoEstacion.agregarEstacion(codigo, nombre);
     }
 
+
+
     @Override
-    public Retorno registrarConexion(String codigoEstacionOrigen, String codigoEstacionDestino,
-                                     int identificadorConexion, double costo, double tiempo, double kilometros,
+    public Retorno registrarConexion(String codigoEstacionOrigen, String codigoEstacionDestino,int identificadorConexion, double costo, double tiempo, double kilometros,
                                      EstadoCamino estadoDeLaConexion) {
-        return Retorno.noImplementada();
+        return grafoEstacion.agregarConexion(codigoEstacionOrigen,codigoEstacionDestino,identificadorConexion,costo,tiempo,kilometros,estadoDeLaConexion);
     }
 
     @Override
