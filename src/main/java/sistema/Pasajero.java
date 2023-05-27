@@ -59,12 +59,12 @@ public class Pasajero {
 
     @Override
     public String toString() {
-        return "Pasajero{" +
-                "identificador='" + identificador + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", edad=" + edad +
-                ", nacionalidad='" + nacionalidad + '\'' +
-                '}';
+        return
+                identificador + ';' +
+                        nombre + ';' +
+                        edad + ';' +
+                nacionalidad.getCodigo() + '|' ;
+
     }
 /*
     public int compareTo(Pasajero p) {
@@ -79,8 +79,10 @@ public class Pasajero {
 
  */
 
+
+
     public int compareTo(Pasajero p) {
-        int comparacionIdentificador = this.identificador.compareTo(p.identificador);
+        int comparacionIdentificador = convertirCadena(this.identificador).compareTo(convertirCadena(p.identificador));
 
         if (comparacionIdentificador == 0) {
             return this.nombre.compareTo(p.nombre);
@@ -89,6 +91,21 @@ public class Pasajero {
         } else {
             return 1;
         }
+    }
+
+    private String soloNumeros(String cadena1){
+        return cadena1.replaceAll("[^\\d.]", "");
+    }
+    private Integer convertirCadena(String cadena) {
+        String resultado = "";
+        for (char caracter : cadena.toCharArray()) {
+            if (Character.isDigit(caracter)) {
+                resultado += caracter;
+            } else if (caracter == '#') {
+                break;
+            }
+        }
+        return Integer.parseInt(resultado);
     }
 
 

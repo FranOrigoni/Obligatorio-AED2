@@ -3,27 +3,34 @@ package sistema;
 import interfaz.EstadoCamino;
 import interfaz.Grafo;
 import interfaz.Retorno;
+import lista.Lista;
+import lista.ListaImpl;
+
+import java.awt.*;
 
 public class EstacionDeTrenGrafo implements Grafo {
 
     private int cantMaxEstaciones;
     private boolean esDirigido;
     private int cantEstaciones;
-    private Conexion[][] matrizAdyacencia;
+   // private Conexion[][] matrizAdyacencia;
     private boolean[] estacionesUsadas;
     private Estacion[] estacionesVertices;
+    private Lista<Conexion>[][] matrizAdyacencia;
 
 
     public EstacionDeTrenGrafo(int cantMaxEstaciones, boolean esDirigido) {
         this.esDirigido = esDirigido;
         this.cantMaxEstaciones = cantMaxEstaciones;
-        this.matrizAdyacencia = new Conexion[cantMaxEstaciones + 1][cantMaxEstaciones + 1];
+        //this.matrizAdyacencia = new Conexion[cantMaxEstaciones + 1][cantMaxEstaciones + 1];
+        this.matrizAdyacencia = new Lista[cantMaxEstaciones][cantMaxEstaciones];
         this.estacionesUsadas = new boolean[cantMaxEstaciones + 1];
         this.estacionesVertices = new Estacion[cantMaxEstaciones + 1];
 
         for (int i = 1; i <= cantMaxEstaciones; i++) {
             for (int j = 1; j <= cantMaxEstaciones; j++) {
-                matrizAdyacencia[i][j] = new Conexion();
+                matrizAdyacencia[i][j] = new ListaImpl<>();
+                //matrizAdyacencia[i][j] = new Conexion(); // se inicializa un arista en cada parte de la matriz y con eso podemos preguntar si existe una arsita o no, Atributo existe
             }
         }
     }
@@ -52,7 +59,7 @@ public class EstacionDeTrenGrafo implements Grafo {
 
 
     private boolean validarDatos(String codigo, String nombre) {
-        if (codigo.isEmpty() && nombre.isEmpty()) {
+        if (codigo.isEmpty() || nombre.isEmpty()) {
             return false;
         }
         return true;
@@ -90,7 +97,7 @@ public class EstacionDeTrenGrafo implements Grafo {
     // TODO Ver el error 6 de la letra
     @Override
     public Retorno agregarConexion(String codigoEstacionOrigen, String codigoEstacionDestino, int identificadorConexion, double costo, double tiempo, double kilometros, EstadoCamino estadoDeLaConexion) {
-
+//TODO NO PUEDE EXITIR 2 CONEXIONES CON EL MISMO ID ENTRE 2 EsTACIONES
         if (validarDoublesConexion(costo, tiempo, kilometros)) {
 
             if (validarStringConexion(codigoEstacionOrigen, codigoEstacionDestino, estadoDeLaConexion)) {
@@ -103,9 +110,15 @@ public class EstacionDeTrenGrafo implements Grafo {
 
                             int obtenerPosOrigen = obtenerPos(codigoEstacionOrigen); // obtiene el indice del array
                             int obtenerPosDestino = obtenerPos(codigoEstacionDestino);// obtiene el indice del array
+
                             if (obtenerPosOrigen >= 0 && obtenerPosDestino >= 0) {
-                                matrizAdyacencia[obtenerPosOrigen][obtenerPosDestino] = new Conexion(costo, tiempo, kilometros, estadoDeLaConexion); // hace la matriz con esos indices y genera la conexion entre ellos
-                                return Retorno.ok();
+                                if (esDirigido) {
+                                    matrizAdyacencia[obtenerPosOrigen][obtenerPosDestino].insertar(new Conexion(costo, tiempo, kilometros, estadoDeLaConexion,identificadorConexion)); // hace la matriz con esos indices y genera la conexion entre ellos
+                                    return Retorno.ok();
+                                } else {
+                                    matrizAdyacencia[obtenerPosDestino][obtenerPosOrigen] = matrizAdyacencia[obtenerPosOrigen][obtenerPosDestino];
+                                    return Retorno.ok();
+                                }
                             }
                         }
                         return Retorno.error5("no existe la estación de destino.");
@@ -134,16 +147,41 @@ public class EstacionDeTrenGrafo implements Grafo {
         return true;
     }
 
+    /*
 
     @Override
-    public void eliminarEstacion(int v) {
+    public void eliminarEstacion(String codigo) {
+        cantEstaciones--;
+        int posVert = obtenerPos(codigo);
+        if (posVert >= 0) {
+            estacionesVertices[posVert] = null;
+            for (int i = 1; i <= cantMaxEstaciones; i++) {
+                matrizAdyacencia[posVert][i].setExiste(false); //filas
+                matrizAdyacencia[posVert][i].setCosto(0); //filas
+                matrizAdyacencia[posVert][i].setKilometros(0); //filas
+                matrizAdyacencia[posVert][i].setTiempo(0); //filas
+                matrizAdyacencia[posVert][i].setEstadoDeLaConexion(null);
+
+                matrizAdyacencia[i][posVert].setExiste(false); //columnas
+                matrizAdyacencia[i][posVert].setCosto(0); //columnas
+                matrizAdyacencia[i][posVert].setKilometros(0); //columnas
+                matrizAdyacencia[i][posVert].setTiempo(0);
+                matrizAdyacencia[i][posVert].setEstadoDeLaConexion(null);
+            }
+        }
 
     }
 
     @Override
     public void eliminarConexion(int origen, int destino) {
-
+          matrizAdyacencia[origen][destino].setExiste(false);
+          matrizAdyacencia[origen][destino].setCosto(0);
+          matrizAdyacencia[origen][destino].setKilometros(0);
+          matrizAdyacencia[origen][destino].setTiempo(0);
+          matrizAdyacencia[origen][destino].setEstadoDeLaConexion(null);
     }
+
+*/
 
     @Override
     public boolean existeEstacion(String codigo) {
@@ -171,17 +209,22 @@ public class EstacionDeTrenGrafo implements Grafo {
     }
 
 
-    private class Conexion {
+    private class Conexion implements Comparable<Conexion> {
+
+        public int idConexion;
+        public boolean existe;
         public double costo;
         public double tiempo;
         public double kilometros;
         public EstadoCamino estadoDeLaConexion;
 
-        public Conexion(double costo, double tiempo, double kilometros, EstadoCamino estadoDeLaConexion) {
+        public Conexion(double costo, double tiempo, double kilometros, EstadoCamino estadoDeLaConexion, int idConexion) {
             this.costo = costo;
             this.tiempo = tiempo;
             this.kilometros = kilometros;
             this.estadoDeLaConexion = estadoDeLaConexion;
+            this.idConexion = idConexion;
+            this.existe = true;
         }
 
         public Conexion() {
@@ -218,6 +261,19 @@ public class EstacionDeTrenGrafo implements Grafo {
 
         public void setEstadoDeLaConexion(EstadoCamino estadoDeLaConexion) {
             this.estadoDeLaConexion = estadoDeLaConexion;
+        }
+
+        public boolean isExiste() {
+            return existe;
+        }
+
+        public void setExiste(boolean existe) {
+            this.existe = existe;
+        }
+
+        @Override
+        public int compareTo(Conexion o) {
+            return 0;
         }
     }
 

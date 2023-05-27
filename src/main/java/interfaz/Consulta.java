@@ -66,10 +66,6 @@ public class Consulta {
             this.valorNacionalidad = valorNacionalidad;
         }
 
-        public Nacionalidad getValorNacionalidad() {
-            return valorNacionalidad;
-        }
-
         public NodoConsulta(final TipoNodoConsulta tipoNodoConsulta,
                             final NodoConsulta izq,
                             final NodoConsulta der) {
@@ -93,6 +89,10 @@ public class Consulta {
             return valorString;
         }
 
+        public Nacionalidad getValorNacionalidad() {
+            return valorNacionalidad;
+        }
+
         public NodoConsulta getIzq() {
             return izq;
         }
@@ -102,7 +102,7 @@ public class Consulta {
         }
     }
 
-        public Consulta or(Consulta consulta) {
+    public Consulta or(Consulta consulta) {
         return or(this, consulta);
     }
 
@@ -132,6 +132,54 @@ public class Consulta {
     public static Consulta nombreIgual(String nombre) {
         return new Consulta(new NodoConsulta(TipoNodoConsulta.NombreIgual, 0, Objects.requireNonNull(nombre),
                 null, null, null));
+    }
+
+    public String toUrl() {
+        StringBuilder sb = new StringBuilder("digraph G{\n");
+        toUrl(raiz, null, sb, "R");
+        sb.append("}");
+        return String.format("https://dreampuf.github.io/GraphvizOnline/#%s",
+                sb.toString().replace("\n", "%0A")
+                        .replace(" ", "%20")
+                        .replace("#", "%232")
+                        .replace("\"", "%22")
+                        .replace("{", "%7B")
+                        .replace("}", "%7D")
+                        .replace("[", "%5B")
+                        .replace("]", "%5D")
+                        .replace("=", "%3D")
+                        .replace("-", "%2D")
+                        .replace("_", "%5F")
+                        .replace(">", "%3E")
+                        .replace(";", "%3B"));
+    }
+
+    private void toUrl(NodoConsulta nodo, String nombrePadre, StringBuilder sb, String prefix) {
+        if (nodo != null) {
+            switch (nodo.tipoNodoConsulta) {
+                case Or:
+                case And:
+                    sb.append(String.format("%s [label=\"%s\"];\n", prefix, nodo.tipoNodoConsulta));
+                    break;
+                case EdadMayor:
+                    sb.append(String.format("%s [label=\"%s [%s]\"];\n", prefix, nodo.tipoNodoConsulta, nodo.valorInt));
+                    break;
+                case NombreIgual:
+                    sb.append(String.format("%s [label=\"%s [%s]\"];\n", prefix, nodo.tipoNodoConsulta, nodo.valorString));
+                    break;
+                case Nacionalidad:
+                    sb.append(String.format("%s [label=\"%s [%s]\"];\n", prefix, nodo.tipoNodoConsulta, nodo.valorNacionalidad));
+                    break;
+                default:
+                    sb.append(String.format("%s [label=\"%s\"];\n", prefix, nodo.tipoNodoConsulta));
+                    break;
+            }
+            if (nombrePadre != null) {
+                sb.append(String.format("%s -> %s;\n", nombrePadre, prefix));
+            }
+            toUrl(nodo.izq, prefix, sb, prefix + "_L");
+            toUrl(nodo.der, prefix, sb, prefix + "_R");
+        }
     }
 
     @Override
@@ -416,6 +464,4 @@ public class Consulta {
         }
         return null;
     }
-
-
 }
