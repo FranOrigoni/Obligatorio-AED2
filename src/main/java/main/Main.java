@@ -1,14 +1,14 @@
 package main;
 
-import interfaz.Consulta;
-import interfaz.Retorno;
-import interfaz.Sistema;
+import interfaz.*;
 import jdk.jshell.ImportSnippet;
+import lista.Lista;
+import lista.ListaImpl;
 import sistema.ABBPasajero;
+import sistema.EstacionDeTrenGrafo;
 import sistema.ImplementacionSistema;
 import interfaz.Retorno;
 import sistema.Pasajero;
-import  interfaz.Nacionalidad;
 
 public class Main {
     public static void main(String[] args) {
@@ -37,10 +37,22 @@ public class Main {
         //IS.registrarPasajero("US3212","CR7",38);
         //IS.registrarPasajero("ES029.232#3:","Neymar",29);
 
+        System.out.println(IS.filtrarPasajeros(Consulta.edadMayor(22)));
+    IS.filtrarPasajeros(Consulta.edadMayor(22));
+     IS.filtrarPasajeros(Consulta.fromString("[edad > 24] AND [nacionalidad ='FR' OR nombre='Felipe']"));
+   //  IS.listarPasajerosPorNacionalidad(Nacionalidad.Francia);
 
-   // IS.filtrarPasajeros(Consulta.edadMayor(22));
-   //   IS.filtrarPasajeros(Consulta.fromString("[edad > 24] AND [nacionalidad ='FR' OR nombre='Felipe']"));
-     // IS.listarPasajerosPorNacionalidad(Nacionalidad.Alemania);
+       // EstacionDeTrenGrafo grafo = new EstacionDeTrenGrafo(6,true);
+/*
+        IS.registrarEstacionDeTren("LLL000","MADRID_1");
+        IS.registrarEstacionDeTren("BAB010","MADRID_2");
+        IS.registrarConexion("LLL000","BAB010", 1, 222, 333, 22, EstadoCamino.BUENO);
+        IS.registrarConexion("LLL000","BAB010", 2, 888, 333, 22, EstadoCamino.BUENO);
+
+        IS.registrarConexion("LLL000","BAB010", 1, 666, 333, 22, EstadoCamino.BUENO);
+
+
+*/
       // IS.buscarPasajero("FR123.456#2");
      //    abbPasajero.imprimirDatos();
 

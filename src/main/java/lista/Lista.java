@@ -10,4 +10,5 @@ public interface Lista<T> {
     boolean esVacia();
     boolean esLlena();
     void imprimirDatos();
+    public T get(int indice);
 }

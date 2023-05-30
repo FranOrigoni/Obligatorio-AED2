@@ -12,10 +12,34 @@ public class ListaImpl<T extends Comparable<T>> implements Lista<T> {
     }
 
     @Override
+    /*
     public void insertar(T dato) {
         inicio = new NodoLista<T>(dato, inicio);
         largo++;
     }
+*/
+    public void insertar(T dato) {
+        NodoLista<T> nuevoNodo = new NodoLista<T>(dato, null);
+
+        if (inicio == null) {
+            // Si la lista está vacía, el nuevo nodo se convierte en el inicio
+            inicio = nuevoNodo;
+        } else {
+            NodoLista<T> nodoActual = inicio;
+
+            // Recorremos la lista hasta llegar al último nodo
+
+            while (nodoActual.getSig() != null) {
+                nodoActual = nodoActual.getSig();
+            }
+
+            // Enlazamos el nuevo nodo al final de la lista
+            nodoActual.setSig(nuevoNodo);
+        }
+
+        largo++;
+    }
+
 
     @Override
     public void borrar(T dato) {
@@ -118,6 +142,18 @@ public class ListaImpl<T extends Comparable<T>> implements Lista<T> {
         public String toString() {
             return dato.toString();
         }
+    }
+
+    @Override
+    public T get(int indice) {
+
+
+        NodoLista<T> actual = inicio;
+        for (int i = 0; i < indice; i++) {
+            actual = actual.sig;
+        }
+
+        return actual.dato;
     }
 
 

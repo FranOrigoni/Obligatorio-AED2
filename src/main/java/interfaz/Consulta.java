@@ -1,8 +1,5 @@
 package interfaz;
 
-import sistema.ABBPasajero;
-import sistema.Pasajero;
-
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -53,11 +50,11 @@ public class Consulta {
         private final NodoConsulta der;
 
         public NodoConsulta(final TipoNodoConsulta tipoNodoConsulta,
-                            final int valorInt,
-                            final String valorString,
-                            final Nacionalidad valorNacionalidad,
-                            final NodoConsulta izq,
-                            final NodoConsulta der) {
+            final int valorInt,
+            final String valorString,
+            final Nacionalidad valorNacionalidad,
+            final NodoConsulta izq,
+            final NodoConsulta der) {
             this.tipoNodoConsulta = tipoNodoConsulta;
             this.valorInt = valorInt;
             this.valorString = valorString;
@@ -67,8 +64,8 @@ public class Consulta {
         }
 
         public NodoConsulta(final TipoNodoConsulta tipoNodoConsulta,
-                            final NodoConsulta izq,
-                            final NodoConsulta der) {
+            final NodoConsulta izq,
+            final NodoConsulta der) {
             this.tipoNodoConsulta = tipoNodoConsulta;
             this.izq = izq;
             this.der = der;
@@ -111,12 +108,12 @@ public class Consulta {
     }
 
     public static Consulta and(Consulta c1,
-                               Consulta c2) {
+        Consulta c2) {
         return new Consulta(new NodoConsulta(TipoNodoConsulta.And, 0, "", null, c1.raiz, c2.raiz));
     }
 
     public static Consulta or(Consulta c1,
-                              Consulta c2) {
+        Consulta c2) {
         return new Consulta(new NodoConsulta(TipoNodoConsulta.Or, 0, "", null, c1.raiz, c2.raiz));
     }
 
@@ -126,12 +123,12 @@ public class Consulta {
 
     public static Consulta nacionalidadIgual(Nacionalidad nacionalidad) {
         return new Consulta(new NodoConsulta(TipoNodoConsulta.Nacionalidad, 0, null,
-                Objects.requireNonNull(nacionalidad), null, null));
+            Objects.requireNonNull(nacionalidad), null, null));
     }
 
     public static Consulta nombreIgual(String nombre) {
         return new Consulta(new NodoConsulta(TipoNodoConsulta.NombreIgual, 0, Objects.requireNonNull(nombre),
-                null, null, null));
+            null, null, null));
     }
 
     public String toUrl() {
@@ -139,19 +136,19 @@ public class Consulta {
         toUrl(raiz, null, sb, "R");
         sb.append("}");
         return String.format("https://dreampuf.github.io/GraphvizOnline/#%s",
-                sb.toString().replace("\n", "%0A")
-                        .replace(" ", "%20")
-                        .replace("#", "%232")
-                        .replace("\"", "%22")
-                        .replace("{", "%7B")
-                        .replace("}", "%7D")
-                        .replace("[", "%5B")
-                        .replace("]", "%5D")
-                        .replace("=", "%3D")
-                        .replace("-", "%2D")
-                        .replace("_", "%5F")
-                        .replace(">", "%3E")
-                        .replace(";", "%3B"));
+            sb.toString().replace("\n", "%0A")
+                .replace(" ", "%20")
+                .replace("#", "%232")
+                .replace("\"", "%22")
+                .replace("{", "%7B")
+                .replace("}", "%7D")
+                .replace("[", "%5B")
+                .replace("]", "%5D")
+                .replace("=", "%3D")
+                .replace("-", "%2D")
+                .replace("_", "%5F")
+                .replace(">", "%3E")
+                .replace(";", "%3B"));
     }
 
     private void toUrl(NodoConsulta nodo, String nombrePadre, StringBuilder sb, String prefix) {
@@ -219,7 +216,7 @@ public class Consulta {
         System.out.println(Consulta.fromString("[[[[[edad>10]]]] AND [nombre='pepe']]"));
         System.out.println(Consulta.fromString("'pepe'=nombre"));
         System.out.println(Consulta.fromString("[[edad>12 AND nacionalidad='ES' AND nombre='Roberto'] OR " +
-                "[edad>   14 AND     ['Raul'    =     nombre OR nombre= 'clotilda']]]"));
+            "[edad>   14 AND     ['Raul'    =     nombre OR nombre= 'clotilda']]]"));
 
         //Estas son claramente invalidas
         System.out.println(Consulta.fromString("[[edad>10] AND nombre='pepe'"));
@@ -288,7 +285,7 @@ public class Consulta {
                 return null;
             }
             return fromStringRec(resultadoDerecha.resto, new NodoConsulta(TipoNodoConsulta.And, previo,
-                    resultadoDerecha.resultado));
+                resultadoDerecha.resultado));
         } else if (consulta.startsWith("OR")) {
             // Ya parseamos una regla previo, vimos un simbolo de or. por lo que tendriamos que unir
             // el resultado parseado de la derecha con lo previo que teniamos
@@ -299,7 +296,7 @@ public class Consulta {
             }
 
             return fromStringRec(resultadoDerecha.resto, new NodoConsulta(TipoNodoConsulta.Or, previo,
-                    resultadoDerecha.resultado));
+                resultadoDerecha.resultado));
         } else {
             // Si no eran reglas compuestas o corchetes, quiere decir que tiene que haber una regla simple.
             if (previo != null) {
@@ -310,9 +307,9 @@ public class Consulta {
             }
             //De las simples tratamos de parsear todas, la primera que no de un vacio es la regla que sirve
             ResultadoParse<NodoConsulta> reglaSimple =
-                    primeroNoNulo(parsearReglaSimple(TipoNodoConsulta.EdadMayor, consulta),
-                            parsearReglaSimple(TipoNodoConsulta.Nacionalidad, consulta),
-                            parsearReglaSimple(TipoNodoConsulta.NombreIgual, consulta));
+                primeroNoNulo(parsearReglaSimple(TipoNodoConsulta.EdadMayor, consulta),
+                    parsearReglaSimple(TipoNodoConsulta.Nacionalidad, consulta),
+                    parsearReglaSimple(TipoNodoConsulta.NombreIgual, consulta));
 
             if (reglaSimple == null) {
                 //Si no encontramos ninguna regla simple, esta mal el string
@@ -333,7 +330,7 @@ public class Consulta {
         if (consulta.startsWith("'")) {
             int idxSiguienteComita = consulta.indexOf('\'', 1);
             return new ResultadoParse<>(consulta.substring(1, idxSiguienteComita),
-                    consulta.substring(idxSiguienteComita + 1));
+                consulta.substring(idxSiguienteComita + 1));
         } else {
             return null;
         }
@@ -352,7 +349,7 @@ public class Consulta {
                 indiceCaracter++;
             }
             return new ResultadoParse<>(valor,
-                    consulta.substring(indiceCaracter));
+                consulta.substring(indiceCaracter));
         } else {
             return null;
         }
@@ -377,7 +374,7 @@ public class Consulta {
                     return null;
                 }
                 return new ResultadoParse<>(new NodoConsulta(tipoEsperado, valorNumerico.resultado, "",
-                        null, null, null), valorNumerico.resto);
+                    null, null, null), valorNumerico.resto);
             } else {
                 ResultadoParse<String> texto = parsearValorString(consulta.substring(idxInicio + 1));
                 Nacionalidad nacionalidad = Nacionalidad.fromCodigo(texto.resultado);
@@ -387,8 +384,8 @@ public class Consulta {
                     return null;
                 }
                 return new ResultadoParse<>(new NodoConsulta(tipoEsperado, 0, texto.resultado, nacionalidad,
-                        null, null),
-                        texto.resto);
+                    null, null),
+                    texto.resto);
             }
         } else if (!tipoEsperado.esNumerico) {
             ResultadoParse<String> texto = parsearValorString(consulta);
@@ -405,7 +402,7 @@ public class Consulta {
                 String restoDespuesSimbolo = texto.resto.substring(idxSimbolo + 1).trim();
                 if (restoDespuesSimbolo.startsWith(tipoEsperado.valorStr)) {
                     return new ResultadoParse<>(new NodoConsulta(tipoEsperado, 0, texto.resultado, nacionalidad,
-                            null, null), restoDespuesSimbolo.substring(tipoEsperado.valorStr.length()));
+                        null, null), restoDespuesSimbolo.substring(tipoEsperado.valorStr.length()));
                 }
             } else {
                 return null;
@@ -417,7 +414,7 @@ public class Consulta {
     }
 
     private static int buscarSimbolo(final TipoNodoConsulta tipoEsperado,
-                                     final String consulta) {
+        final String consulta) {
         int idxInicio = 0;
         while (idxInicio < consulta.length() && consulta.charAt(idxInicio) != tipoEsperado.simboloEsperado) {
             if (consulta.charAt(idxInicio) == ' ') {
@@ -440,8 +437,8 @@ public class Consulta {
         private final T resultado;
 
         public ResultadoParse(
-                final T resultado,
-                final String resto) {
+            final T resultado,
+            final String resto) {
             this.resto = resto;
             this.resultado = resultado;
         }

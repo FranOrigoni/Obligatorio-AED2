@@ -149,7 +149,7 @@ public class TestEstacionesConexiones {
         checkearError(ERROR_1, sistema.registrarConexion(MADRID_1, MADRID_2, 1, 222, -333, 22, EstadoCamino.BUENO), "negativos");
         checkearError(ERROR_1, sistema.registrarConexion(MADRID_1, MADRID_2, 1, 222, 333, -22, EstadoCamino.BUENO), "negativos");
         checkearError(ERROR_1, sistema.registrarConexion(MADRID_1, MADRID_2, -1, -222, -333, 22, EstadoCamino.BUENO), "negativos");
-        checkearError(ERROR_1, sistema.registrarConexion(MADRID_1, MADRID_2, 0, -222, -333, 22, EstadoCamino.BUENO), "negativos");
+         checkearError(ERROR_1, sistema.registrarConexion(MADRID_1, MADRID_2, 0, -222, -333, 22, EstadoCamino.BUENO), "negativos");
 
     }
 
@@ -170,7 +170,7 @@ public class TestEstacionesConexiones {
         registroEstacionOk(sistema, EST_LONDRES, EST_MADRID_1, EST_MADRID_2, EST_PARIS_1);
         checkearError(ERROR_3, sistema.registrarConexion(MADRID_1, "ZADDD@23", 1, 222, 333, 22, EstadoCamino.BUENO), "codigos invalidos");
         checkearError(ERROR_3, sistema.registrarConexion("ADSQ!2", "ZADDD@23", 1, 222, 333, 22, EstadoCamino.BUENO), "codigos invalidos");
-        checkearError(ERROR_3, sistema.registrarConexion("~AAA233", "ZADDD@23", 1, 222, 333, 22, EstadoCamino.BUENO), "codigos invalidos");
+         checkearError(ERROR_3, sistema.registrarConexion("~AAA233", "ZADDD@23", 1, 222, 333, 22, EstadoCamino.BUENO), "codigos invalidos");
 
     }
 
@@ -228,7 +228,11 @@ public class TestEstacionesConexiones {
     public void testActualizarConexionError1() {
         Sistema sistema = tengoUnSistemaValido();
         registroEstacionOk(sistema, EST_LONDRES, EST_MADRID_1, EST_MADRID_2, EST_PARIS_1);
+
+
         checkearOk(sistema.registrarConexion(MADRID_1, MADRID_2, 1, 222, 333, 22, EstadoCamino.BUENO), "negativos");
+        checkearOk(sistema.registrarConexion(LONDRES, MADRID_2, 10, 222, 333, 22, EstadoCamino.BUENO), "negativos");
+
         checkearError(ERROR_1, sistema.actualizarCamino(MADRID_1, MADRID_2, -1, 222, 333, 22, EstadoCamino.BUENO), "negativos");
         checkearError(ERROR_1, sistema.actualizarCamino(MADRID_1, MADRID_2, 12, -222, 333, 22, EstadoCamino.BUENO), "negativos");
         checkearError(ERROR_1, sistema.actualizarCamino(MADRID_1, MADRID_2, 1, 222, -333, 22, EstadoCamino.BUENO), "negativos");

@@ -2,7 +2,7 @@ package sistema;
 
 import interfaz.Nacionalidad;
 
-public class Pasajero {
+public class Pasajero implements Comparable<Pasajero> {
 
     private String identificador;
     private String nombre;
@@ -63,7 +63,7 @@ public class Pasajero {
                 identificador + ';' +
                         nombre + ';' +
                         edad + ';' +
-                nacionalidad.getCodigo() + '|' ;
+                nacionalidad.getCodigo() + "|" ;
 
     }
 /*

@@ -9,13 +9,13 @@ public class ABBPasajero {
     private NodoABB raiz;
 
 
-    public Retorno registrarPasajero(String identificadorPasajero, String nombre, int edad) {
+    public Retorno registrarPasajero(String identificadorPasajero, String nombre, int edad, ListaImpl<Pasajero> listaPorNacionalidad) {
         if (validadarDatosPasajero(identificadorPasajero, nombre, edad)) {
             if (validarIdentificador(identificadorPasajero)) {
-                Retorno ret = insertar(new Pasajero(identificadorPasajero, nombre, edad));
+                Retorno ret = insertar(new Pasajero(identificadorPasajero, nombre, edad), listaPorNacionalidad);
                 if (ret.isOk()) {
                     return Retorno.ok();
-                }else {
+                } else {
                     return Retorno.error3("");
                 }
             }
@@ -48,37 +48,42 @@ public class ABBPasajero {
     }
 
 
-    public Retorno insertar(Pasajero nodoPasajero) {
+    public Retorno insertar(Pasajero nodoPasajero, ListaImpl<Pasajero> listaPorNacionalidad) {
         if (raiz == null) {
             raiz = new NodoABB(nodoPasajero);
+            listaPorNacionalidad.insertar(nodoPasajero);
             return Retorno.ok();
         } else {
-            Retorno ret = insertarRec(raiz, nodoPasajero);
+            Retorno ret = insertarRec(raiz, nodoPasajero, listaPorNacionalidad);
             if (ret.isOk())
+
                 return Retorno.ok();
         }
         return Retorno.error3("");
     }
 
+
     public NodoABB getRaiz() {
         return raiz;
     }
 
-    private Retorno insertarRec(NodoABB nodo, Pasajero nodoPasajero) {
+    private Retorno insertarRec(NodoABB nodo, Pasajero nodoPasajero, ListaImpl<Pasajero> listaPorNacionalidad) {
         if (!pertence(nodoPasajero.getIdentificador())) {
             if (nodo.getNodoPasajero().compareTo(nodoPasajero) > 0) {
                 if (nodo.izq == null) {
                     nodo.izq = new NodoABB(nodoPasajero);
+                    listaPorNacionalidad.insertar(nodoPasajero);
                     return Retorno.ok();
                 } else {
-                    return insertarRec(nodo.izq, nodoPasajero);
+                    return insertarRec(nodo.izq, nodoPasajero, listaPorNacionalidad);
                 }
             } else if (nodo.getNodoPasajero().compareTo(nodoPasajero) < 0) {
                 if (nodo.der == null) {
                     nodo.der = new NodoABB(nodoPasajero);
+                    listaPorNacionalidad.insertar(nodoPasajero);
                     return Retorno.ok();
                 } else {
-                    return insertarRec(nodo.der, nodoPasajero);
+                    return insertarRec(nodo.der, nodoPasajero, listaPorNacionalidad);
                 }
             }
         }
@@ -93,42 +98,29 @@ public class ABBPasajero {
     private boolean pertenceRec(NodoABB nodo, String identificadorPasajero) {
         if (nodo == null) {
             return false;
-        }
-           else if (identificadorPasajero.equals(nodo.getNodoPasajero().getIdentificador())) {
-                return true;
-            } else if (nodo.getNodoPasajero().getIdentificador().compareTo(identificadorPasajero) > 0) {
-                return pertenceRec(nodo.getIzq(), identificadorPasajero);
-            } else {
-               return pertenceRec(nodo.getDer(), identificadorPasajero);
-            }
-
-        }
-
-
-
-
-
-
-
-
-    /*
-    private boolean pertenceRec(NodoABB nodo, String identificadorPasajero) {
-        if (nodo == null) {
-            return false;
-        }
-
-        if (identificadorPasajero == nodo.getNodoPasajero().getIdentificador()) {
+        } else if (convertirCadena(identificadorPasajero).equals(convertirCadena(nodo.getNodoPasajero().getIdentificador()))) {
             return true;
-        }
-
-        if (Integer.parseInt(identificadorPasajero) < Integer.parseInt(nodo.getNodoPasajero().getIdentificador())) {
+        } else if (convertirCadena(nodo.getNodoPasajero().getIdentificador()).compareTo(convertirCadena(identificadorPasajero)) > 0) {
             return pertenceRec(nodo.getIzq(), identificadorPasajero);
         } else {
             return pertenceRec(nodo.getDer(), identificadorPasajero);
         }
+
     }
 
-     */
+
+    private Integer convertirCadena(String cadena) {
+        String resultado = "";
+        for (char caracter : cadena.toCharArray()) {
+            if (Character.isDigit(caracter)) {
+                resultado += caracter;
+            } else if (caracter == '#') {
+                break;
+            }
+        }
+        return Integer.parseInt(resultado);
+    }
+
 
     public void imprimirDatos() {
         imprimirDatos(raiz);
@@ -148,7 +140,7 @@ public class ABBPasajero {
         vaciarArbol(raiz);
     }
 
-    private void vaciarArbol(NodoABB nodo){
+    private void vaciarArbol(NodoABB nodo) {
         if (nodo == null) {
             return;
         }
@@ -200,13 +192,30 @@ public class ABBPasajero {
             this.der = der;
         }
     }
-
+    public String resultado;
     public Retorno filtrarPasajero(Consulta c) {
-        return filtrarPasajero(raiz, c.getRaiz());
+        resultado = "";
+        resultado = filtrarPasajeroRec(raiz, c.getRaiz());
+        return Retorno.ok(resultado);
     }
 
+    private String filtrarPasajeroRec(NodoABB pasajero, Consulta.NodoConsulta c) {
 
-    private boolean filtrarPasajeroB(NodoABB pasajero, Consulta.NodoConsulta c) {
+        if (pasajero != null) {
+            filtrarPasajeroRec(pasajero.getIzq(), c);
+            if (filtrarPasajeroB(pasajero, c)){
+                if(!resultado.isEmpty())
+                {
+                    resultado += "|";
+                }
+                resultado += pasajero.getNodoPasajero().getIdentificador();
+            }
+            filtrarPasajeroRec(pasajero.getDer(), c);
+        }
+        return resultado;
+    }
+
+    private boolean filtrarPasajeroB (NodoABB pasajero, Consulta.NodoConsulta c){
         if (pasajero != null) {
             if (c.getIzq() == null && c.getDer() == null) {
                 if (c.getTipoNodoConsulta().equals(Consulta.TipoNodoConsulta.EdadMayor)) {
@@ -229,22 +238,6 @@ public class ABBPasajero {
         return false;
     }
 
-    private Retorno filtrarPasajero(NodoABB pasajero, Consulta.NodoConsulta c) {
-
-        String resultado = "";
-        if (c == null) {
-            return Retorno.error1("");
-        }
-        if (pasajero == null) {
-            return Retorno.ok(resultado);
-        }
-        if (filtrarPasajeroB(pasajero, c)) {
-            resultado += "|" + pasajero.getNodoPasajero().getIdentificador();
-        }
-        return Retorno.ok(resultado + filtrarPasajero(pasajero.getIzq(), c) + filtrarPasajero(pasajero.getDer(), c));
-
-    }
-
 
     public Retorno buscarPasajero(String identificador) {
         if (!validarIdentificador(identificador)) {
@@ -254,28 +247,27 @@ public class ABBPasajero {
             return Retorno.error2("");
         }
         int contador = 0;
-        return buscarPasajeroRec(raiz, identificador,contador);
+        return buscarPasajeroRec(raiz, identificador, contador);
     }
 
 
-    private Retorno buscarPasajeroRec(NodoABB nodo, String identificador,int contador) {
+    private Retorno buscarPasajeroRec(NodoABB nodo, String identificador, int contador) {
 
         String datosPasajero = "";
         if (nodo != null) {
 
             if (identificador.equals(nodo.getNodoPasajero().getIdentificador())) {
-
                 datosPasajero = nodo.getNodoPasajero().getIdentificador() + ";" + nodo.getNodoPasajero().getNombre() + ";" + nodo.getNodoPasajero().getEdad() + ";" + nodo.getNodoPasajero().getNacionalidad().getCodigo();
                 return Retorno.ok(contador, datosPasajero);
-            } else if (nodo.getNodoPasajero().getIdentificador().compareTo(identificador) > 0) {
+            } else if (convertirCadena(nodo.getNodoPasajero().getIdentificador()).compareTo(convertirCadena(identificador)) > 0) {
                 contador++;
-                return buscarPasajeroRec(nodo.izq, identificador,contador);
+                return buscarPasajeroRec(nodo.izq, identificador, contador);
             } else {
                 contador++;
-                return buscarPasajeroRec(nodo.der, identificador,contador);
+                return buscarPasajeroRec(nodo.der, identificador, contador);
             }
         } else {
-            return null;
+            return Retorno.ok();
         }
 
     }
@@ -291,50 +283,75 @@ public class ABBPasajero {
             datos += nodo.getNodoPasajero().toString();
             datos = listarPasajerosAscendenteRec(nodo.getDer(), datos);
         }
-        return datos;
+        if (!datos.isEmpty()) {
+            return datos;
+        }
+        return "";
     }
 
 
     public Retorno listarPasajerosDescendente() {
         String datos = "";
-        return Retorno.ok(listarPasajerosDescendenteRec(raiz, datos));
+        String resultado = listarPasajerosDescendenteRec(raiz, datos);
+        if (!resultado.isEmpty()) {
+            resultado = resultado.substring(0, resultado.length() - 1);
+        }
+        return Retorno.ok(resultado);
     }
 
     private String listarPasajerosDescendenteRec(NodoABB nodo, String datos) {
+
         if (nodo != null) {
             datos = listarPasajerosDescendenteRec(nodo.getDer(), datos);
             datos += nodo.getNodoPasajero().toString();
             datos = listarPasajerosDescendenteRec(nodo.getIzq(), datos);
+
         }
+        if (!datos.isEmpty()) {
+            return datos;
+        }
+        return "";
 
-
-        return datos;
     }
 
 
-    public Retorno listarPasajerosPorNacionalidad(Nacionalidad nacionalidad) {
-        String datos = "";
-        if (nacionalidad == null) {
-            return Retorno.error1("");
-        }
-        return Retorno.ok(listarPasajerosPorNacionalidadRec(nacionalidad, raiz, datos));
-    }
 
-    public String listarPasajerosPorNacionalidadRec(Nacionalidad nacionalidad, NodoABB pasajero, String datos) {
-        ListaImpl<String> datosPasajero = new ListaImpl<>();
-
-        if (pasajero != null) {
-            if (pasajero.getNodoPasajero().getNacionalidad().equals(nacionalidad)) {
-                datos += pasajero.getNodoPasajero().getIdentificador() + ";" + pasajero.getNodoPasajero().getNombre() + ";" + pasajero.getNodoPasajero().getEdad() + ";" + pasajero.getNodoPasajero().getNacionalidad() + "\n";
-                datosPasajero.insertar(datos);
+    public Retorno listarPasajerosPorNacionalidad (ListaImpl<Pasajero> listaPorNacionalidad){
+        for (int i = 0; i < listaPorNacionalidad.largo(); i++) {
+            if (listaPorNacionalidad.get(i) == null) {
+                return Retorno.error1("");
             }
-            datos = listarPasajerosPorNacionalidadRec(nacionalidad, pasajero.getIzq(), datos);
-            datos = listarPasajerosPorNacionalidadRec(nacionalidad, pasajero.getDer(), datos);
         }
+        String resultado = obtenerStringPasajeros(listaPorNacionalidad);
+        if (!resultado.isEmpty()) {
+            resultado = resultado.substring(0, resultado.length() - 1);
+        }
+        return Retorno.ok(resultado);
 
-
-        return datosPasajero.toString();
     }
+
+    public String obtenerStringPasajeros (ListaImpl<Pasajero> listaPorNacionalidad){
+        String datos="";
+        if (listaPorNacionalidad != null) {
+            for (int i = 0; i < listaPorNacionalidad.largo(); i++) {
+                Pasajero pasajero = listaPorNacionalidad.get(i);
+                datos += pasajero.toString();
+            }
+        }
+        if (!datos.isEmpty()) {
+            return datos;
+        }
+        return "";
+    }
+
+
+
+
+
+
+
+
+
  /*
     public int compareTo(Pasajero p) {
         int comparacionIdentificador = convertirCadena(this.getRaiz().getNodoPasajero().getIdentificador()).compareTo(convertirCadena(p.getIdentificador()));

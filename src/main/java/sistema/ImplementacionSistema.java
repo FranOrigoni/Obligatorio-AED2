@@ -1,13 +1,28 @@
 package sistema;
 
 import interfaz.*;
+import lista.ListaImpl;
 
 
 public class ImplementacionSistema implements Sistema {
 
-    ABBPasajero abbPasajero = new ABBPasajero();
-    EstacionDeTrenGrafo grafoEstacion = new EstacionDeTrenGrafo(0,true);
+    ABBPasajero abbPasajero;
+    EstacionDeTrenGrafo grafoEstacion;
 
+    ListaImpl<Pasajero> pasajerosFranceses;
+    ListaImpl<Pasajero> pasajerosAlemanes;
+    ListaImpl<Pasajero> pasajerosEspanoles;
+    ListaImpl<Pasajero> pasajerosReinoUnido;
+    ListaImpl<Pasajero> pasajerosOtros;
+
+
+    /*
+    public EstacionDeTrenGrafo getGrafoEstacion() {
+        return grafoEstacion;
+    }
+
+
+     */
 
     @Override
     public Retorno inicializarSistema(int maxEstaciones) {
@@ -15,45 +30,95 @@ public class ImplementacionSistema implements Sistema {
         if (maxEstaciones <= 5) {
             return Retorno.error1("maxEstaciones es menor o igual a 5");
         } else {
-           this.abbPasajero.vaciarArbol();
-          // EstacionDeTrenGrafo grafoEstacion = new EstacionDeTrenGrafo(maxEstaciones,true);
+            this.abbPasajero = new ABBPasajero();
+            this.pasajerosFranceses = new ListaImpl<>();
+            this.pasajerosAlemanes = new ListaImpl<>();
+            this.pasajerosEspanoles = new ListaImpl<>();
+            this.pasajerosOtros = new ListaImpl<>();
+            this.pasajerosReinoUnido = new ListaImpl<>();
+            this.grafoEstacion = new EstacionDeTrenGrafo(maxEstaciones,true);
             return Retorno.ok();
         }
     }
 
     @Override
     public Retorno registrarPasajero(String identificadorPasajero, String nombre, int edad) {
-        return abbPasajero.registrarPasajero(identificadorPasajero, nombre, edad);
+        if(identificadorPasajero != null && !identificadorPasajero.isEmpty()){
+            ListaImpl<Pasajero> listaNacionalidadTipo = obtenerTipoNacionalidad(identificadorPasajero);
+            return abbPasajero.registrarPasajero(identificadorPasajero, nombre, edad, listaNacionalidadTipo);
+        }
+        return Retorno.error1("");
     }
 
+    private ListaImpl<Pasajero> obtenerTipoNacionalidad(String identificadorPasajero) {
+        if (identificadorPasajero.substring(0,2).equals(Nacionalidad.Francia.getCodigo())) {
+            return pasajerosFranceses;
+        } else if (identificadorPasajero.substring(0,2).equals(Nacionalidad.Espania.getCodigo())) {
+            return pasajerosEspanoles;
+        } else if (identificadorPasajero.substring(0,2).equals(Nacionalidad.Alemania.getCodigo())) {
+            return pasajerosOtros;
+        } else if (identificadorPasajero.substring(0,2).equals(Nacionalidad.ReinoUnido.getCodigo())) {
+            return pasajerosReinoUnido;
+        }else
+            return pasajerosAlemanes;
+    }
 
     @Override
     public Retorno filtrarPasajeros(Consulta consulta) {
-        return abbPasajero.filtrarPasajero(consulta);
+        if(consulta!= null){
+          return abbPasajero.filtrarPasajero(consulta);
+
+
+        }
+        return Retorno.error1("");
+
     }
 
 
     @Override
     public Retorno buscarPasajero(String identificador) {
-     return abbPasajero.buscarPasajero(identificador);
+        return abbPasajero.buscarPasajero(identificador);
     }
 
     @Override
     public Retorno listarPasajerosAscendente() {
-        return abbPasajero.listarPasajerosAscendente();
+        Retorno ret = abbPasajero.listarPasajerosAscendente();
+        ret.setValorString(quitarUltimoCaracter(ret.getValorString()));
+
+        return ret;
     }
 
     @Override
     public Retorno listarPasajerosDescendente() {
-       return abbPasajero.listarPasajerosDescendente();
 
+       Retorno ret =  abbPasajero.listarPasajerosDescendente();
+        return ret;
     }
+
+    private String quitarUltimoCaracter(String unString) {
+        return unString.substring(0,unString.length()-1);
+    }
+
+
 
     @Override
     public Retorno listarPasajerosPorNacionalidad(Nacionalidad nacionalidad) {
-        return abbPasajero.listarPasajerosPorNacionalidad(nacionalidad);
-
+        ListaImpl<Pasajero> listaPorNacionalidad = obtenerTipoNacionalidad(nacionalidad);
+        return abbPasajero.listarPasajerosPorNacionalidad(listaPorNacionalidad);
     }
+    private ListaImpl<Pasajero> obtenerTipoNacionalidad(Nacionalidad nacionalidad) {
+        if (nacionalidad.equals(Nacionalidad.Francia)) {
+            return pasajerosFranceses;
+        } else if (nacionalidad.equals(Nacionalidad.Espania)) {
+            return pasajerosEspanoles;
+        } else if (nacionalidad.equals(Nacionalidad.Alemania)) {
+            return pasajerosOtros;
+        } else if (nacionalidad.equals(Nacionalidad.ReinoUnido)) {
+            return pasajerosReinoUnido;
+        }else
+            return pasajerosAlemanes;
+    }
+
 
     @Override
     public Retorno registrarEstacionDeTren(String codigo, String nombre) {
@@ -61,33 +126,36 @@ public class ImplementacionSistema implements Sistema {
     }
 
 
-
     @Override
-    public Retorno registrarConexion(String codigoEstacionOrigen, String codigoEstacionDestino,int identificadorConexion, double costo, double tiempo, double kilometros,
+    public Retorno registrarConexion(String codigoEstacionOrigen, String codigoEstacionDestino, int identificadorConexion, double costo, double tiempo, double kilometros,
                                      EstadoCamino estadoDeLaConexion) {
-        return grafoEstacion.agregarConexion(codigoEstacionOrigen,codigoEstacionDestino,identificadorConexion,costo,tiempo,kilometros,estadoDeLaConexion);
+        return grafoEstacion.agregarConexion(codigoEstacionOrigen, codigoEstacionDestino, identificadorConexion, costo, tiempo, kilometros, estadoDeLaConexion);
     }
 
     @Override
     public Retorno actualizarCamino(String codigoEstacionOrigen, String codigoEstacionDestino,
                                     int identificadorConexion, double costo, double tiempo,
                                     double kilometros, EstadoCamino estadoDelCamino) {
-        return Retorno.noImplementada();
+        return grafoEstacion.actualizarCamino(codigoEstacionOrigen,codigoEstacionDestino,identificadorConexion,costo,tiempo,kilometros,estadoDelCamino);
     }
 
     @Override
     public Retorno listadoEstacionesCantTrasbordos(String codigo, int cantidad) {
-        return Retorno.noImplementada();
+        return grafoEstacion.listadoEstacionesCantTrasbordos(codigo,cantidad);
     }
+
+
+
+
 
     @Override
     public Retorno viajeCostoMinimoKilometros(String codigoEstacionOrigen, String codigoEstacionDestino) {
-        return Retorno.noImplementada();
+        return grafoEstacion.viajeCostoMinimoKilometros(codigoEstacionOrigen,codigoEstacionDestino);
     }
 
     @Override
     public Retorno viajeCostoMinimoEuros(String codigoEstacionOrigen, String codigoEstacionDestino) {
-        return null;
+        return grafoEstacion.viajeCostoMinimoEuros(codigoEstacionOrigen,codigoEstacionDestino);
     }
 
 }
