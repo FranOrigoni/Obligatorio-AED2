@@ -1,6 +1,8 @@
 package lista;
 
 
+import interfaz.Lista;
+
 public class ListaImpl<T extends Comparable<T>> implements Lista<T> {
 
     protected NodoLista<T> inicio;
@@ -12,12 +14,6 @@ public class ListaImpl<T extends Comparable<T>> implements Lista<T> {
     }
 
     @Override
-    /*
-    public void insertar(T dato) {
-        inicio = new NodoLista<T>(dato, inicio);
-        largo++;
-    }
-*/
     public void insertar(T dato) {
         NodoLista<T> nuevoNodo = new NodoLista<T>(dato, null);
 
@@ -36,15 +32,10 @@ public class ListaImpl<T extends Comparable<T>> implements Lista<T> {
             // Enlazamos el nuevo nodo al final de la lista
             nodoActual.setSig(nuevoNodo);
         }
-
         largo++;
     }
 
 
-    @Override
-    public void borrar(T dato) {
-
-    }
 
     @Override
     public int largo() {
@@ -65,18 +56,6 @@ public class ListaImpl<T extends Comparable<T>> implements Lista<T> {
 
 
     @Override
-    public T recuperar(T dato) {
-        NodoLista<T> aux = inicio;
-        while (aux != null) {
-            if (aux.getDato().equals(dato)) {
-                return aux.getDato();
-            }
-            aux = aux.getSig();
-        }
-        return null;
-    }
-
-    @Override
     public boolean esVacia() {
         return largo == 0;
     }
@@ -86,29 +65,8 @@ public class ListaImpl<T extends Comparable<T>> implements Lista<T> {
         return false;
     }
 
-    @Override
-    public void imprimirDatos() {
-        NodoLista<T> aux = inicio;
-        while (aux != null) {
-            if (aux.getSig() != null){
-                System.out.print(aux.getDato() + " -> ");
-            }else{
-                System.out.print(aux.getDato());
-            }
-            aux = aux.getSig();
-        }
-        System.out.println();
-    }
 
-    public void imprimirDatosV2(NodoLista<T> nodo ) {
-        if (nodo!=null){
-            System.out.println(nodo.getDato());
-            imprimirDatosV2(nodo.getSig());
-        }
-    }
-
-
-    class NodoLista<T>{
+    private class NodoLista<T>{
         private T dato;
         private NodoLista<T> sig;
 
@@ -146,7 +104,6 @@ public class ListaImpl<T extends Comparable<T>> implements Lista<T> {
 
     @Override
     public T get(int indice) {
-
 
         NodoLista<T> actual = inicio;
         for (int i = 0; i < indice; i++) {

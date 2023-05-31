@@ -14,7 +14,6 @@ public class Cola<T> {
 
 	public void encolar(T dato) {
 		if (this.inicio == null) {
-//			inicio = fin = new NodoCola<T>(dato); // Alternativa 
 			inicio = new NodoCola<T>(dato);
 			fin = inicio;
 		} else {
@@ -24,7 +23,7 @@ public class Cola<T> {
 		this.largo++;
 	}
 
-	// Pre: !esVacia()
+
 	public T desencolar() {
 		T dato = this.inicio.dato;
 		inicio = inicio.sig;

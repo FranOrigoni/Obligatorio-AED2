@@ -1,7 +1,7 @@
 package sistema;
 
+import dominio.Retorno;
 import org.junit.jupiter.api.Assertions;
-import interfaz.*;
 
 public class AuxAsserciones {
     public static Retorno checkearOk(Retorno retorno, String mensajeError) {

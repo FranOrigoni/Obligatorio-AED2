@@ -1,5 +1,7 @@
 package sistema;
 
+import dominio.EstadoCamino;
+import dominio.Retorno;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +16,8 @@ import static sistema.AuxAccionesEstaciones.registroEstacionOk;
 import static sistema.AuxAsserciones.checkearError;
 import static sistema.AuxAsserciones.checkearOk;
 import static sistema.AuxTestClaseEstacionNoUsar.estacion;
-import static interfaz.EstadoCamino.*;
-import static interfaz.Retorno.Resultado.*;
+import static dominio.EstadoCamino.*;
+import static dominio.Retorno.Resultado.*;
 import  interfaz.*;
 
 /**********************************************************

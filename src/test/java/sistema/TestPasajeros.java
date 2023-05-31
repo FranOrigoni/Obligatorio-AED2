@@ -1,5 +1,7 @@
 package sistema;
 
+import dominio.Nacionalidad;
+import dominio.Retorno;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,7 @@ import static sistema.AuxAsserciones.checkearOk;
 import static sistema.AuxTestPasajeroNoUsar.getIdentificadorValido;
 import static sistema.AuxTestPasajeroNoUsar.pasajero;
 import static sistema.TestUtil.*;
-import static interfaz.Retorno.Resultado.*;
+import static dominio.Retorno.Resultado.*;
 
 /**********************************************************
  ************************ ERRORES COMUNES *****************

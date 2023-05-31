@@ -1,6 +1,6 @@
 package sistema;
 
-import interfaz.EstadoCamino;
+import dominio.EstadoCamino;
 
 public class AuxTestConexionNoUsar {
     private AuxTestClaseEstacionNoUsar origen;

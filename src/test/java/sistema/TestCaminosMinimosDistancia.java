@@ -1,7 +1,7 @@
 package sistema;
 
-import interfaz.EstadoCamino;
-import interfaz.Retorno;
+import dominio.EstadoCamino;
+import dominio.Retorno;
 import interfaz.Sistema;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,8 +12,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static interfaz.EstadoCamino.*;
-import static interfaz.Retorno.Resultado.*;
+import static dominio.EstadoCamino.*;
+import static dominio.Retorno.Resultado.*;
 import static sistema.AuxAccionesEstaciones.*;
 import static sistema.AuxAsserciones.checkearError;
 import static sistema.AuxAsserciones.checkearOk;

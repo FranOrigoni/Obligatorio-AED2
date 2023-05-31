@@ -1,6 +1,6 @@
 package sistema;
 
-import interfaz.Nacionalidad;
+import dominio.Nacionalidad;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.Locale;

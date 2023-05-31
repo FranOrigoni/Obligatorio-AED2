@@ -1,5 +1,10 @@
 package interfaz;
 
+import dominio.Consulta;
+import dominio.EstadoCamino;
+import dominio.Nacionalidad;
+import dominio.Retorno;
+
 /**
  * Provee una interfaz para interactuar con el sistema
  */

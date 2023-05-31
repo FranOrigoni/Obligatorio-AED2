@@ -1,5 +1,6 @@
 package sistema;
 
+import dominio.Retorno;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

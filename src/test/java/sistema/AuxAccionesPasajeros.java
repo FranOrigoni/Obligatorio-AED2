@@ -1,7 +1,7 @@
 package sistema;
 
-import interfaz.Nacionalidad;
-import interfaz.Retorno;
+import dominio.Nacionalidad;
+import dominio.Retorno;
 import interfaz.Sistema;
 
 import static sistema.AuxAsserciones.checkearOk;

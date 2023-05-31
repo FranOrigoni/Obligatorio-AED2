@@ -1,5 +1,6 @@
 package sistema;
 
+import dominio.*;
 import interfaz.*;
 import lista.ListaImpl;
 
@@ -14,15 +15,9 @@ public class ImplementacionSistema implements Sistema {
     ListaImpl<Pasajero> pasajerosEspanoles;
     ListaImpl<Pasajero> pasajerosReinoUnido;
     ListaImpl<Pasajero> pasajerosOtros;
+    int kilometros;
+    int dinero;
 
-
-    /*
-    public EstacionDeTrenGrafo getGrafoEstacion() {
-        return grafoEstacion;
-    }
-
-
-     */
 
     @Override
     public Retorno inicializarSistema(int maxEstaciones) {
@@ -31,6 +26,8 @@ public class ImplementacionSistema implements Sistema {
             return Retorno.error1("maxEstaciones es menor o igual a 5");
         } else {
             this.abbPasajero = new ABBPasajero();
+            this.kilometros = 1; // Parametro para reutilizar funcion dijkstra
+            this.dinero = 2; // Parametro para reutilizar funcion dijkstra
             this.pasajerosFranceses = new ListaImpl<>();
             this.pasajerosAlemanes = new ListaImpl<>();
             this.pasajerosEspanoles = new ListaImpl<>();
@@ -67,8 +64,6 @@ public class ImplementacionSistema implements Sistema {
     public Retorno filtrarPasajeros(Consulta consulta) {
         if(consulta!= null){
           return abbPasajero.filtrarPasajero(consulta);
-
-
         }
         return Retorno.error1("");
 
@@ -91,14 +86,12 @@ public class ImplementacionSistema implements Sistema {
     @Override
     public Retorno listarPasajerosDescendente() {
 
-       Retorno ret =  abbPasajero.listarPasajerosDescendente();
-        return ret;
+       return abbPasajero.listarPasajerosDescendente();
     }
 
     private String quitarUltimoCaracter(String unString) {
         return unString.substring(0,unString.length()-1);
     }
-
 
 
     @Override
@@ -118,7 +111,6 @@ public class ImplementacionSistema implements Sistema {
         }else
             return pasajerosAlemanes;
     }
-
 
     @Override
     public Retorno registrarEstacionDeTren(String codigo, String nombre) {
@@ -144,18 +136,15 @@ public class ImplementacionSistema implements Sistema {
         return grafoEstacion.listadoEstacionesCantTrasbordos(codigo,cantidad);
     }
 
-
-
-
-
     @Override
     public Retorno viajeCostoMinimoKilometros(String codigoEstacionOrigen, String codigoEstacionDestino) {
-        return grafoEstacion.viajeCostoMinimoKilometros(codigoEstacionOrigen,codigoEstacionDestino);
+        return grafoEstacion.viajeCostoMinimoKilometros(codigoEstacionOrigen,codigoEstacionDestino,kilometros);
     }
 
     @Override
     public Retorno viajeCostoMinimoEuros(String codigoEstacionOrigen, String codigoEstacionDestino) {
-        return grafoEstacion.viajeCostoMinimoEuros(codigoEstacionOrigen,codigoEstacionDestino);
+        return grafoEstacion.viajeCostoMinimoEuros(codigoEstacionOrigen,codigoEstacionDestino,dinero);
     }
+
 
 }

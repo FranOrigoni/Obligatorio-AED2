@@ -1,4 +1,4 @@
-package interfaz;
+package dominio;
 
 import java.util.Objects;
 import java.util.logging.Logger;

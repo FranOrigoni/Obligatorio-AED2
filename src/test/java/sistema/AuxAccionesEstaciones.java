@@ -1,5 +1,6 @@
 package sistema;
 
+import dominio.Retorno;
 import interfaz.*;
 
 import static sistema.AuxAsserciones.checkearOk;
